@@ -36,8 +36,19 @@
 		<dependency>
 			<groupId>com.sf.vas</groupId>
 			<artifactId>atopup-jpa</artifactId>
-			<version>0.1.5-SNAPSHOT</version>
+			<version>0.1.7-SNAPSHOT</version>
 		</dependency>
+        <dependency>
+			<groupId>com.sf.vas</groupId>
+			<artifactId>vas-utils</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+			<groupId>org.jboss.logging</groupId>
+			<artifactId>jboss-logging</artifactId>
+			<version>3.3.0.Final</version>
+        </dependency>
+        
     </dependencies>
 
     <build>

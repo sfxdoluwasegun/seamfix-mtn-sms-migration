@@ -13,6 +13,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import lombok.ToString;
+
 
 /**
  * <p>Java class for RequestSOAPHeader complex type.
@@ -63,6 +65,7 @@ import javax.xml.bind.annotation.XmlType;
     "presentid",
     "bundleID"
 })
+@ToString
 public class RequestSOAPHeader {
 
     protected String spId;

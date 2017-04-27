@@ -9,11 +9,12 @@ package com.sf.vas.mtnsms.enums;
  */
 public enum SmsSetting {
 
-    SMS_WSDL_FILE_URL("http://localhost:8088/mockSendSmsBinding?wsdl", "URL to the wsdl file"),
-    SMS_SP_ID("35000001", "SpId in the request header"),
-    SMS_SERVICE_ID("35000001000001", "serviceId in the request header"),
+    SMS_SP_ID("2340110003533", "SpId in the request header"),
+    SMS_SERVICE_ID("234012000008996", "serviceId in the request header"),
     SMS_SP_PASSWORD("123456", "spPassword in the request header"),
-    SMS_OA_FA("8613300000010", "oa and fa in the request header"),
+    SMS_NOTIFY_RECEIPT_URL("http://10.137.213.69:8080/smsrecieptnotification", "This the SOAP url for waiting for recieving sms delivery status"),
+    SMS_SENDER_NAME("seamfix", "Sms sender name"),
+    SMS_SEND_SMS_SERVICE_URL("http://10.199.198.45:8310/SendSmsService/services/SendSms", "This is the URL to the send sms service"),
 	;
 	
 	SmsSetting(String defaultValue, String defaultDescription) {

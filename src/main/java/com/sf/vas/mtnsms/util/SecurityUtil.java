@@ -5,7 +5,9 @@ package com.sf.vas.mtnsms.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Calendar;
 
 import com.sf.vas.mtnsms.exception.SmsRuntimeException;
 
@@ -73,6 +75,17 @@ public class SecurityUtil {
 		System.out.println(new String(SecurityUtil.encryptSHA1("Hi")));
 		
 		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+		String created = sdf.format(Calendar.getInstance().getTime());
+		
+		String spId = "2340110003533";
+		String spPassword = "Abc123.";
+
+		String password = SecurityUtil.md5(spId + spPassword + created);
+		
+		System.out.println("created : "+created);
+		System.out.println("password : "+password);
+
 		System.out.println("done");
 	}
 }

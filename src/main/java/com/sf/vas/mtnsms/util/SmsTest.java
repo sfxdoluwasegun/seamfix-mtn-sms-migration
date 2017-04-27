@@ -11,23 +11,33 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import org.csapi.schema.parlayx.common.v2_1.ChargingInformation;
-import org.csapi.schema.parlayx.common.v2_1.SimpleReference;
-import org.csapi.schema.parlayx.sms.send.v2_2.local.SendSms;
-import org.csapi.schema.parlayx.sms.send.v2_2.local.SendSmsResponse;
-import org.csapi.wsdl.parlayx.sms.send.v2_2.service.PolicyException;
-import org.csapi.wsdl.parlayx.sms.send.v2_2.service.SendSmsService;
-import org.csapi.wsdl.parlayx.sms.send.v2_2.service.ServiceException;
-
 import com.sf.vas.mtnsms.jaxb.commonheadtypes.RequestSOAPHeader;
-import com.sf.vas.mtnsms.util.SecurityUtil;
+import com.sf.vas.mtnsms.soapartifacts.sendservice.ChargingInformation;
+import com.sf.vas.mtnsms.soapartifacts.sendservice.PolicyException_Exception;
+import com.sf.vas.mtnsms.soapartifacts.sendservice.SendSms;
+import com.sf.vas.mtnsms.soapartifacts.sendservice.SendSmsResponse;
+import com.sf.vas.mtnsms.soapartifacts.sendservice.SendSmsService;
+import com.sf.vas.mtnsms.soapartifacts.sendservice.SendSms_Type;
+import com.sf.vas.mtnsms.soapartifacts.sendservice.ServiceException_Exception;
+import com.sf.vas.mtnsms.soapartifacts.sendservice.SimpleReference;
 
 /**
  * @author dawuzi
  *
  */
 public class SmsTest {
-
+	
+	public static void main(String[] args) throws Exception {
+	}
+	
+	public static void test2() {
+	}
+	
+	public static void test() throws MalformedURLException, PolicyException_Exception, ServiceException_Exception {
+		SendSmsResponse smsResponse = sendSms(null, null);
+		System.out.println("smsResponse : "+smsResponse);
+	}
+	
 	public static RequestSOAPHeader createHeader(){
 		
 //		RequestSOAPHeaderE requestHeaderE = new RequestSOAPHeader();
@@ -48,7 +58,7 @@ public class SmsTest {
 		return requestHeader;		
 	}
 
-	public static SendSms createBody() throws URISyntaxException {
+	public static SendSms_Type createBody() throws URISyntaxException {
 		
 		URI address = new URI("tel:86122333");
 		URI endpoint = new URI("http://10.137.213.69:8080/sms");
@@ -64,7 +74,7 @@ public class SmsTest {
 		sim.setEndpoint(endpoint.toString());
 		sim.setInterfaceName("SmsNotification");
 
-		SendSms param = new SendSms();
+		SendSms_Type param = new SendSms_Type();
 
 		param.getAddresses().add(address.toString());
 //		param.addAddresses(address);
@@ -86,17 +96,12 @@ public class SmsTest {
 
 	}
 	
-	public static SendSmsResponse sendSms(RequestSOAPHeader header, SendSms body) throws PolicyException, ServiceException, MalformedURLException{
+	public static SendSmsResponse sendSms(RequestSOAPHeader header, SendSms_Type body) throws MalformedURLException, PolicyException_Exception, ServiceException_Exception{
 		SendSmsService sendSmsService = new SendSmsService(new URL("http://localhost:8088/mockSendSmsBinding"));
 		System.out.println("got here");
-		org.csapi.wsdl.parlayx.sms.send.v2_2.service.SendSms sendSms = sendSmsService.getSendSms();
 		
+		SendSms sendSms = sendSmsService.getSendSms();
 		return sendSms.sendSms(body);
 	}
 	
-	public static void main(String[] args) throws Exception {
-		SendSmsResponse smsResponse = sendSms(null, null);
-		
-		System.out.println("smsResponse : "+smsResponse);
-	}
 }
