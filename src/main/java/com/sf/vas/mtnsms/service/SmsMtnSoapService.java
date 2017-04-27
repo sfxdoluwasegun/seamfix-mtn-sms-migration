@@ -17,7 +17,7 @@ import javax.xml.ws.handler.Handler;
 import org.jboss.logging.Logger;
 
 import com.sf.vas.mtnsms.enums.SmsSetting;
-import com.sf.vas.mtnsms.soap.handler.PrintOutboundSoapMessageHandler;
+//import com.sf.vas.mtnsms.soap.handler.PrintOutboundSoapMessageHandler;
 import com.sf.vas.mtnsms.soap.handler.RequestHeaderHandler;
 import com.sf.vas.mtnsms.soapartifacts.sendservice.SendSms;
 import com.sf.vas.mtnsms.soapartifacts.sendservice.SendSmsService;
@@ -47,7 +47,7 @@ public class SmsMtnSoapService {
 		List<Handler> handlers = new ArrayList<>();
 		
 		handlers.add(new RequestHeaderHandler(smsQueryService));
-		handlers.add(new PrintOutboundSoapMessageHandler());
+//		handlers.add(new PrintOutboundSoapMessageHandler());
 		
 		sendSms = sendSmsService.getSendSms();
 		

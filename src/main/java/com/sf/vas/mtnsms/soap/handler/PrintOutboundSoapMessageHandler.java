@@ -24,12 +24,13 @@ import javax.xml.ws.handler.soap.SOAPMessageContext;
 import org.jboss.logging.Logger;
 import org.w3c.dom.Node;
 
-import com.sf.vas.mtnsms.exception.SmsRuntimeException;
 import com.sf.vas.mtnsms.jaxb.commonheadtypes.RequestSOAPHeader;
 import com.sf.vas.mtnsms.soapartifacts.sendservice.SendSms_Type;
 
 /**
  * @author dawuzi
+ * 
+ * A soap handler for printing the content of the sent xml payload. Mostly for debugging purposes
  *
  */
 public class PrintOutboundSoapMessageHandler implements SOAPHandler<SOAPMessageContext> {
@@ -52,8 +53,9 @@ public class PrintOutboundSoapMessageHandler implements SOAPHandler<SOAPMessageC
 				
 				String string = outputStream.toString(StandardCharsets.UTF_8.name());
 				
-				log.info("XXXXXXXXXXXXXXXX message XXXXXXXXXXX");
+				log.info("XXXXXXXXXXXXXXXX message start XXXXXXXXXXX");
 				log.info(string);
+				log.info("XXXXXXXXXXXXXXXX message end XXXXXXXXXXX");
 				
 				SOAPHeader header = context.getMessage().getSOAPPart().getEnvelope().getHeader();
 				
@@ -67,15 +69,11 @@ public class PrintOutboundSoapMessageHandler implements SOAPHandler<SOAPMessageC
 				log.info("type : "+type.toString());
 				
 			} catch (SOAPException e) {
-				throw new SmsRuntimeException("Error adding a new Header element", e);
-//			} catch (JAXBException e) {
-//				throw new SmsRuntimeException("Error marshalling the header object", e);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error("", e);
+			} catch (IOException e) {	
+				log.error("", e);
 			} catch (JAXBException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error("", e);
 			}
 		}
 		return true;
