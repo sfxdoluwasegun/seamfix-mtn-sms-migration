@@ -33,6 +33,7 @@ import lombok.ToString;
  *         &lt;element name="timeStamp" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="linkid" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *         &lt;element name="OperatorID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
+ *         &lt;element name="traceUniqueID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -49,7 +50,8 @@ import lombok.ToString;
     "serviceId",
     "timeStamp",
     "linkid",
-    "operatorID"
+    "operatorID",
+    "traceUniqueID"
 })
 @ToString
 public class NotifySOAPHeader {
@@ -62,6 +64,7 @@ public class NotifySOAPHeader {
     protected String linkid;
     @XmlElement(name = "OperatorID")
     protected String operatorID;
+    protected String traceUniqueID;
 
     /**
      * Gets the value of the spRevId property.
@@ -229,6 +232,30 @@ public class NotifySOAPHeader {
      */
     public void setOperatorID(String value) {
         this.operatorID = value;
+    }
+
+    /**
+     * Gets the value of the traceUniqueID property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTraceUniqueID() {
+        return traceUniqueID;
+    }
+
+    /**
+     * Sets the value of the traceUniqueID property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTraceUniqueID(String value) {
+        this.traceUniqueID = value;
     }
 
 }

@@ -79,12 +79,15 @@ public class SecurityUtil {
 		String created = sdf.format(Calendar.getInstance().getTime());
 		
 		String spId = "2340110003533";
-		String spPassword = "Abc123.";
+		String spPassword = "Abc123";
+		String spRevId = "sdp";
 
 		String password = SecurityUtil.md5(spId + spPassword + created);
+		String revPassword = SecurityUtil.md5(spRevId + spPassword + created);
 		
 		System.out.println("created : "+created);
 		System.out.println("password : "+password);
+		System.out.println("revPassword : "+revPassword);
 
 		System.out.println("done");
 	}

@@ -27,6 +27,7 @@ import javax.xml.ws.handler.soap.SOAPMessageContext;
 import org.jboss.logging.Logger;
 import org.w3c.dom.Node;
 
+import com.sf.vas.mtnsms.constants.SmsConstants;
 import com.sf.vas.mtnsms.enums.SmsSetting;
 import com.sf.vas.mtnsms.exception.SmsRuntimeException;
 import com.sf.vas.mtnsms.jaxb.commonheadtypes.ObjectFactory;
@@ -41,7 +42,7 @@ import com.sf.vas.mtnsms.util.SecurityUtil;
  */
 public class RequestHeaderHandler implements SOAPHandler<SOAPMessageContext> {
 
-	private SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
+	private SimpleDateFormat sdf = new SimpleDateFormat(SmsConstants.SMS_HEADER_TIMESTAMP_PATTERN);
 	private Logger log = Logger.getLogger(getClass());
 
 	private Marshaller headerMarshaller; 
@@ -96,8 +97,6 @@ public class RequestHeaderHandler implements SOAPHandler<SOAPMessageContext> {
 				headerMarshaller.marshal(header, soapHeader);
 				
 				context.getMessage().saveChanges();
-				
-//				context.get
 				
 			} catch (SOAPException e) {
 				throw new SmsRuntimeException("Error adding a new Header element", e);

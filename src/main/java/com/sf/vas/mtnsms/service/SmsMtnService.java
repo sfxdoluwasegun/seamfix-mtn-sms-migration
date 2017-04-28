@@ -5,6 +5,7 @@ package com.sf.vas.mtnsms.service;
 
 import java.sql.Timestamp;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
@@ -29,6 +30,7 @@ import com.sf.vas.utils.restartifacts.sms.SmsRequest;
  *
  */
 @Stateless
+@EJB(name="SmsMtnService", beanInterface = SmsMtnService.class)
 public class SmsMtnService {
 	
 	private Logger log = Logger.getLogger(getClass());

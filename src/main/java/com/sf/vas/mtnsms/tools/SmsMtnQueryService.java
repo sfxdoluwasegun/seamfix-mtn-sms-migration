@@ -4,11 +4,16 @@
 package com.sf.vas.mtnsms.tools;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import com.sf.vas.atjpa.entities.Settings;
+import com.sf.vas.atjpa.entities.SmsLog;
+import com.sf.vas.atjpa.entities.SmsLog_;
 import com.sf.vas.atjpa.enums.SettingsType;
 import com.sf.vas.atjpa.parent.JEntity;
 import com.sf.vas.atjpa.tools.QueryService;
@@ -19,6 +24,7 @@ import com.sf.vas.mtnsms.enums.SmsSetting;
  *
  */
 @Stateless
+@EJB(name="SmsMtnQueryService", beanInterface = SmsMtnQueryService.class)
 public class SmsMtnQueryService extends QueryService {
 	
 	@PostConstruct
@@ -84,5 +90,18 @@ public class SmsMtnQueryService extends QueryService {
 	public <T extends JEntity> T createImmediately(T entity){
 		create(entity);
 		return entity;
+	}
+	
+	public SmsLog getSmsLogByCorrelator(String correlator){
+		CriteriaQuery<SmsLog> criteriaQuery = criteriaBuilder.createQuery(SmsLog.class);
+		Root<SmsLog> root = criteriaQuery.from(SmsLog.class);
+
+		criteriaQuery.select(root);
+		criteriaQuery.where(criteriaBuilder.and(
+				criteriaBuilder.equal(root.get(SmsLog_.correlator), correlator),
+				criteriaBuilder.equal(root.get(SmsLog_.deleted), false)
+				));
+
+		return getSafeSingleResult(criteriaQuery);
 	}
 }

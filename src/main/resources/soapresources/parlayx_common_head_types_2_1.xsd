@@ -30,6 +30,8 @@
 			<xsd:element name="timeStamp" type="xsd:string" minOccurs="0"/>
 			<xsd:element name="linkid" type="xsd:string" minOccurs="0"/>
 			<xsd:element name="OperatorID" type="xsd:string" minOccurs="0"/>
+			<!-- This was manually added to cater for the extra traceUniqueID sent back in the notification request -->
+			<xsd:element name="traceUniqueID" type="xsd:string" minOccurs="0"/>
 		</xsd:sequence>
 	</xsd:complexType>
 </xsd:schema>
