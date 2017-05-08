@@ -63,8 +63,6 @@ public class SmsMtnSoapService {
 		
 		requestContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, sendSmsEndpointUrl);
 		
-		log.info("requestContext : "+requestContext);
-		
 	}
 
 	public SendSms getSendSms(){
