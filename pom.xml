@@ -48,8 +48,19 @@
 			<artifactId>jboss-logging</artifactId>
 			<version>3.3.0.Final</version>
         </dependency>
-        
     </dependencies>
+	<distributionManagement>
+		<repository>
+			<id>deployment</id>
+			<name>Internal Releases</name>
+			<url>http://singlewindow.seamfix.com:7997/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>deployment</id>
+			<name>Internal Releases</name>
+			<url>http://singlewindow.seamfix.com:7997/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 
     <build>
         <plugins>
