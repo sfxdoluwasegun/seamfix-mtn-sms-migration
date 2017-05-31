@@ -68,18 +68,18 @@ public class RequestHeaderHandler implements SOAPHandler<SOAPMessageContext> {
 		
 		log.info("handle message called in "+getClass().getName());
 
-		JAXBElement<RequestSOAPHeader> header;
-
-		try {
-			header = getRequestSoapHeader(context);
-		} catch (SOAPException | JAXBException e1) {
-			log.error("Error getting Soap Header", e1);
-			return false;
-		}
-
 		Boolean outbound = (Boolean) context.get (MessageContext.MESSAGE_OUTBOUND_PROPERTY);
 		
 		if(outbound != null && outbound){
+			JAXBElement<RequestSOAPHeader> header;
+
+			try {
+				header = getRequestSoapHeader(context);
+			} catch (SOAPException | JAXBException e1) {
+				log.error("Error getting Soap Header", e1);
+				return false;
+			}
+
 			try {
 				
 				SOAPEnvelope envelope = context.getMessage().getSOAPPart().getEnvelope();
