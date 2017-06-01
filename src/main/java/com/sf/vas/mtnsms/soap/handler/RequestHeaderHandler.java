@@ -66,11 +66,12 @@ public class RequestHeaderHandler implements SOAPHandler<SOAPMessageContext> {
 	@Override
 	public boolean handleMessage(SOAPMessageContext context) {
 		
-		log.info("handle message called in "+getClass().getName());
-
 		Boolean outbound = (Boolean) context.get (MessageContext.MESSAGE_OUTBOUND_PROPERTY);
 		
 		if(outbound != null && outbound){
+			
+			log.info("handle message called in "+getClass().getName());
+			
 			JAXBElement<RequestSOAPHeader> header;
 
 			try {
