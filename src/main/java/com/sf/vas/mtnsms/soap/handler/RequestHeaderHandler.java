@@ -35,6 +35,9 @@ import com.sf.vas.mtnsms.jaxb.commonheadtypes.RequestSOAPHeader;
 import com.sf.vas.mtnsms.soapartifacts.sendservice.SendSms_Type;
 import com.sf.vas.mtnsms.tools.SmsMtnQueryService;
 import com.sf.vas.mtnsms.util.SecurityUtil;
+import com.sf.vas.utils.crypto.EncryptionUtil;
+import com.sf.vas.utils.exception.VasException;
+import com.sf.vas.utils.exception.VasRuntimeException;
 
 /**
  * @author dawuzi
@@ -51,10 +54,12 @@ public class RequestHeaderHandler implements SOAPHandler<SOAPMessageContext> {
 	private final Pattern COLON_PATTERN = Pattern.compile(":");
 
 	private SmsMtnQueryService queryService;
+	private EncryptionUtil encryptionUtil;
 	private ObjectFactory factory = new ObjectFactory();
 	
-	public RequestHeaderHandler(SmsMtnQueryService queryService) {
+	public RequestHeaderHandler(SmsMtnQueryService queryService, EncryptionUtil encryptionUtil) {
 		this.queryService = queryService;
+		this.encryptionUtil = encryptionUtil;
 		try {
 			headerMarshaller = JAXBContext.newInstance(RequestSOAPHeader.class).createMarshaller();
 			bodyUnmarshaller = JAXBContext.newInstance(SendSms_Type.class).createUnmarshaller();
@@ -132,8 +137,15 @@ public class RequestHeaderHandler implements SOAPHandler<SOAPMessageContext> {
 
 		String spId = queryService.getSettingValue(SmsSetting.SMS_SP_ID);
 		String serviceId = queryService.getSettingValue(SmsSetting.SMS_SERVICE_ID);
-		String spPassword = queryService.getSettingValue(SmsSetting.SMS_SP_PASSWORD);
+		String spPasswordEnc = queryService.getSettingValue(SmsSetting.SMS_SP_PASSWORD);
 		String oafa = getOaFa(context);
+		
+		String spPassword;
+		try {
+			spPassword = encryptionUtil.decrypt(spPasswordEnc);
+		} catch (VasException e) {
+			throw new VasRuntimeException("error decrypting configured spPassword", e);
+		}
 
 		String created = sdf.format(Calendar.getInstance().getTime());
 
