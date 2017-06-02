@@ -41,15 +41,26 @@
         <dependency>
 			<groupId>com.sf.vas</groupId>
 			<artifactId>vas-utils</artifactId>
-			<version>0.0.3-SNAPSHOT</version>
+			<version>0.0.4-SNAPSHOT</version>
         </dependency>
         <dependency>
 			<groupId>org.jboss.logging</groupId>
 			<artifactId>jboss-logging</artifactId>
 			<version>3.3.0.Final</version>
         </dependency>
-        
     </dependencies>
+	<distributionManagement>
+		<repository>
+			<id>deployment</id>
+			<name>Internal Releases</name>
+			<url>http://singlewindow.seamfix.com:7997/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>deployment</id>
+			<name>Internal Releases</name>
+			<url>http://singlewindow.seamfix.com:7997/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 
     <build>
         <plugins>
