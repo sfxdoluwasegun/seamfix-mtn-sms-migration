@@ -6,9 +6,13 @@ package com.sf.vas.mtnsms.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -57,7 +61,55 @@ public class SmsMtnService {
 	
 	@PostConstruct
 	private void init(){
+		updateSmsPropertiesFile();
 		initProperties();
+	}
+
+	private void updateSmsPropertiesFile() {
+		try {
+			if(!file.exists()){
+				log.info("sms properties file does not exist. Proceeding to create one"); 
+				createDefaultSmsPropertiesFile();
+			} else {
+				includeNewSmsProperties();
+			}
+		} catch (IOException e) {
+			log.error("Error updating sms properties file", e);
+		}
+	}
+
+	/**
+	 * This simply updates the sms properties file with any SmsProp key/value pair not found in the file
+	 * 
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	private void includeNewSmsProperties() throws FileNotFoundException, IOException {
+		
+		Properties properties = new Properties();
+		
+		try (InputStream inputStream = new FileInputStream(file)){
+            properties.load(inputStream);
+		}
+		
+		StringBuilder builder = new StringBuilder();
+		String newLine = "\n";
+		
+		for(SmsProps smsProps : SmsProps.values()){
+//			property not found in the file, file needs to be included with it 
+			if(properties.getProperty(smsProps.getKey()) == null){
+				builder.append("#").append(smsProps.getDefaultDescription()).append(newLine);
+				builder.append(smsProps.getKey()).append("=").append(smsProps.getDefaultValue()).append(newLine).append(newLine);
+			}
+		}
+		
+		String updateContents = builder.toString();
+		
+		if(!updateContents.trim().isEmpty()){
+			try(PrintWriter out = new PrintWriter(new FileOutputStream(file, true));){ 
+				out.write(updateContents);
+			} 
+		}
 	}
 
 	private void initProperties() {
@@ -86,6 +138,26 @@ public class SmsMtnService {
 		}
 	}
 	
+	private void createDefaultSmsPropertiesFile() throws IOException {
+		String newLine = "\n";
+		StringBuilder builder = new StringBuilder();
+		
+		builder.append("#Configuration file for the sms messages sent to users").append(newLine).append(newLine).append(newLine);
+		
+		for(SmsProps smsProps : SmsProps.values()){
+			builder.append("#").append(smsProps.getDefaultDescription()).append(newLine);
+			builder.append(smsProps.getKey()).append("=").append(smsProps.getDefaultValue()).append(newLine).append(newLine);
+		}
+		
+		if(!file.exists()){
+			file.createNewFile();
+		}
+		
+		try(PrintWriter out = new PrintWriter(file) ;){ 
+			out.write(builder.toString());
+		} 
+	}
+
 	public void sendSms(SmsProps smsProps, String msisdn, String param, String value) throws VasException {
 		initProperties();
 		
