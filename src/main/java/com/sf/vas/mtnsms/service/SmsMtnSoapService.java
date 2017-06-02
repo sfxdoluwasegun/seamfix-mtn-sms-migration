@@ -22,6 +22,7 @@ import com.sf.vas.mtnsms.soap.handler.RequestHeaderHandler;
 import com.sf.vas.mtnsms.soapartifacts.sendservice.SendSms;
 import com.sf.vas.mtnsms.soapartifacts.sendservice.SendSmsService;
 import com.sf.vas.mtnsms.tools.SmsMtnQueryService;
+import com.sf.vas.utils.crypto.EncryptionUtil;
 
 /**
  * @author dawuzi
@@ -35,6 +36,9 @@ public class SmsMtnSoapService {
 	@Inject
 	SmsMtnQueryService smsQueryService;
 	
+	@Inject
+	private EncryptionUtil encryptionUtil;
+	
 	private SendSmsService sendSmsService;
 	private SendSms sendSms;
 	
@@ -46,7 +50,7 @@ public class SmsMtnSoapService {
 		@SuppressWarnings("rawtypes")
 		List<Handler> handlers = new ArrayList<>();
 		
-		handlers.add(new RequestHeaderHandler(smsQueryService));
+		handlers.add(new RequestHeaderHandler(smsQueryService, encryptionUtil));
 //		handlers.add(new PrintOutboundSoapMessageHandler());
 		
 		sendSms = sendSmsService.getSendSms();
