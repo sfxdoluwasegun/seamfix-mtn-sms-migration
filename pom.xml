@@ -36,12 +36,12 @@
 		<dependency>
 			<groupId>com.sf.vas</groupId>
 			<artifactId>atopup-jpa</artifactId>
-			<version>0.1.10-SNAPSHOT</version>
+			<version>0.1.11-SNAPSHOT</version>
 		</dependency>
         <dependency>
 			<groupId>com.sf.vas</groupId>
 			<artifactId>vas-utils</artifactId>
-			<version>0.0.4-SNAPSHOT</version>
+			<version>0.0.6-SNAPSHOT</version>
         </dependency>
         <dependency>
 			<groupId>org.jboss.logging</groupId>
