@@ -21,7 +21,46 @@
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.14.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+		<dependency>
+			<groupId>com.sf.vas</groupId>
+			<artifactId>atopup-jpa</artifactId>
+			<version>0.1.10-SNAPSHOT</version>
+		</dependency>
+        <dependency>
+			<groupId>com.sf.vas</groupId>
+			<artifactId>vas-utils</artifactId>
+			<version>0.0.4-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+			<groupId>org.jboss.logging</groupId>
+			<artifactId>jboss-logging</artifactId>
+			<version>3.3.0.Final</version>
+        </dependency>
     </dependencies>
+	<distributionManagement>
+		<repository>
+			<id>deployment</id>
+			<name>Internal Releases</name>
+			<url>http://singlewindow.seamfix.com:7997/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>deployment</id>
+			<name>Internal Releases</name>
+			<url>http://singlewindow.seamfix.com:7997/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 
     <build>
         <plugins>
