@@ -4,7 +4,7 @@
 
     <groupId>com.sf.vas</groupId>
     <artifactId>mtn-sms</artifactId>
-    <version>0.0.1-final</version>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>ejb</packaging>
 
     <name>mtn-sms</name>
