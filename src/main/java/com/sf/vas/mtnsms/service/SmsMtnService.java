@@ -170,7 +170,7 @@ public class SmsMtnService {
 		
 		log.info("msisdn : "+msisdn+", message : "+message);
 		
-		sendSms(smsRequest);
+		sendSms(smsProps, smsRequest);
 	}
 	
 	public void sendSms(SmsProps smsProps, String msisdn, Map<String, Object> params) throws VasException {
@@ -185,10 +185,10 @@ public class SmsMtnService {
 		
 		log.info("msisdn : "+msisdn+", message : "+message);
 		
-		sendSms(smsRequest);
+		sendSms(smsProps, smsRequest);
 	}
 	
-	public TransactionResponse sendSms (SmsRequest request) throws VasException {
+	public TransactionResponse sendSms (SmsProps smsProps, SmsRequest request) throws VasException {
 		
 		if(request == null 
 				|| request.getMessage() == null || request.getMessage().trim().isEmpty()
@@ -229,6 +229,7 @@ public class SmsMtnService {
 		smsLog.setMessage(request.getMessage());
 		smsLog.setMsisdn(request.getMsisdn());
 		smsLog.setStatus(Status.PENDING);
+		smsLog.setType(smsProps.name());
 
 		queryService.createImmediately(smsLog);
 		

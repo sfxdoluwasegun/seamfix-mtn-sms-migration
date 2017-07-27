@@ -3,11 +3,14 @@
  */
 package com.sf.vas.mtnsms.enums;
 
+import com.sf.vas.atjpa.enums.SettingsType;
+import com.sf.vas.dsl.contracts.ISettingInfo;
+
 /**
  * @author dawuzi
  *
  */
-public enum SmsSetting {
+public enum SmsSetting implements ISettingInfo {
 
     SMS_SP_ID("2340110003533", "SpId in the request header"),
     SMS_SERVICE_ID("234012000008996", "serviceId in the request header"),
@@ -36,4 +39,11 @@ public enum SmsSetting {
         return defaultDescription;
     }
 	
+	public String getName() {
+		return name();
+	}
+	
+	public SettingsType getSettingsType() {
+		return SettingsType.GENERAL;
+	}
 }
