@@ -71,6 +71,7 @@ public class SmsMtnService {
 				log.info("sms properties file does not exist. Proceeding to create one"); 
 				createDefaultSmsPropertiesFile();
 			} else {
+				log.info("including properties"); 
 				includeNewSmsProperties();
 			}
 		} catch (IOException e) {
@@ -98,8 +99,20 @@ public class SmsMtnService {
 		for(SmsProps smsProps : SmsProps.values()){
 //			property not found in the file, file needs to be included with it 
 			if(properties.getProperty(smsProps.getKey()) == null){
+				log.error("jkkkkkkkkkkkkkkkk updating sms properties file if");
 				builder.append("#").append(smsProps.getDefaultDescription()).append(newLine);
 				builder.append(smsProps.getKey()).append("=").append(smsProps.getDefaultValue()).append(newLine).append(newLine);
+			}else{
+				if(!properties.getProperty(smsProps.getKey()).equalsIgnoreCase(smsProps.getDefaultValue())){
+					builder.append(newLine).append(newLine);
+					builder.append(smsProps.getKey()).append("=").append(smsProps.getDefaultValue()).append(newLine).append(newLine);
+					log.error("jkkkkkkkkkkkkkkkk updating sms properties file");
+					properties.setProperty(smsProps.getKey(), smsProps.getDefaultValue());
+					try(PrintWriter out = new PrintWriter(new FileOutputStream(file, true));){ 
+						properties.store(out, smsPropsFile);
+					} 
+				}
+				
 			}
 		}
 		
