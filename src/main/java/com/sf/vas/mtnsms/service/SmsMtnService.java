@@ -10,9 +10,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -73,10 +80,57 @@ public class SmsMtnService {
 			} else {
 				log.info("including properties"); 
 				includeNewSmsProperties();
+				updateSmsParameter();
 			}
 		} catch (IOException e) {
 			log.error("Error updating sms properties file", e);
 		}
+	}
+
+	private void updateSmsParameter() throws IOException {
+		
+		Map<String,Map<String, String>> mapOfMessagePairs = processParameters();
+		Map<String, String> parameterMessagePair = mapOfMessagePairs.get("parameterMessagePair");
+		Map<String, String> keyMessagePair = mapOfMessagePairs.get("keyMessagePair");
+		
+		if(!(parameterMessagePair == null && keyMessagePair == null)){
+			
+			for(SmsProps smsProps : SmsProps.values()){
+				
+				String fromMap = parameterMessagePair.get(smsProps.getKey());
+		 		String fromEnum = "#"+smsProps.getDefaultDescription();
+		 		
+		 		if(!fromEnum.equalsIgnoreCase(fromMap)){
+		 			updateOnlyParameters(keyMessagePair);
+		 			return;
+				}
+			}
+		}
+		
+		return;
+	}
+
+	private void updateOnlyParameters(Map<String, String> keyMessagePair) throws IOException {
+		
+		StringBuilder builder = new StringBuilder();
+		String newLine = "\n";
+		
+		builder.append("#Configuration file for the sms messages sent to users").append(newLine).append(newLine).append(newLine);
+		
+		for(SmsProps smsProps : SmsProps.values()){
+			builder.append("#").append(smsProps.getDefaultDescription()).append(newLine);
+			String myNewLine = keyMessagePair.get(smsProps.getKey()) == null ? smsProps.getKey()+"="+smsProps.getDefaultValue():keyMessagePair.get(smsProps.getKey());
+			builder.append(myNewLine).append(newLine).append(newLine);
+		}
+		
+		if(!file.exists()){
+			file.createNewFile();
+		}
+		
+		try(PrintWriter out = new PrintWriter(file) ;){ 
+			out.write(builder.toString());
+		} 
+		
 	}
 
 	/**
@@ -99,21 +153,10 @@ public class SmsMtnService {
 		for(SmsProps smsProps : SmsProps.values()){
 //			property not found in the file, file needs to be included with it 
 			if(properties.getProperty(smsProps.getKey()) == null){
-				log.error("jkkkkkkkkkkkkkkkk updating sms properties file if");
 				builder.append("#").append(smsProps.getDefaultDescription()).append(newLine);
 				builder.append(smsProps.getKey()).append("=").append(smsProps.getDefaultValue()).append(newLine).append(newLine);
-			}else{
-				if(!properties.getProperty(smsProps.getKey()).equalsIgnoreCase(smsProps.getDefaultValue())){
-					builder.append(newLine).append(newLine);
-					builder.append(smsProps.getKey()).append("=").append(smsProps.getDefaultValue()).append(newLine).append(newLine);
-					log.error("jkkkkkkkkkkkkkkkk updating sms properties file");
-					properties.setProperty(smsProps.getKey(), smsProps.getDefaultValue());
-					try(PrintWriter out = new PrintWriter(new FileOutputStream(file, true));){ 
-						properties.store(out, smsPropsFile);
-					} 
-				}
-				
 			}
+			
 		}
 		
 		String updateContents = builder.toString();
@@ -123,6 +166,48 @@ public class SmsMtnService {
 				out.write(updateContents);
 			} 
 		}
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	private Map<String, Map<String, String>> processParameters() {
+		
+		log.info("In processParameters");
+		Map<String,Map<String, String>> mapOfMessagePairs = new HashMap<String, Map<String,String>>();
+		
+		Map<String, String> parameterMessagePair = new HashMap<String, String>();
+		Map<String, String> keyMessagePair = new HashMap<String, String>();
+		List<String> listOfParameters = new ArrayList<>();
+		List<String> listOfMessages = new ArrayList<>();
+		
+		try(Stream<String> stream = Files.lines(Paths.get(smsPropsFile))){
+			 listOfParameters = stream.filter(Line -> Line.startsWith("#parameters"))
+					 						  .collect(Collectors.toList());
+		 } catch (IOException e) {
+			// return empty map
+			e.printStackTrace();
+		}
+		
+		try(Stream<String> stream = Files.lines(Paths.get(smsPropsFile))){
+			 listOfMessages = stream.filter(Line -> Line.contains("="))
+					  .collect(Collectors.toList());
+		 } catch (IOException e) {
+			// return empty map
+			e.printStackTrace();
+		}
+		
+		for (int i = 0; i < listOfParameters.size(); i++) {
+			String[] splitMessage = listOfMessages.get(i).split("=");
+			parameterMessagePair.put(splitMessage[0], listOfParameters.get(i));
+			keyMessagePair.put(splitMessage[0], listOfMessages.get(i));
+		 }
+		
+		mapOfMessagePairs.put("parameterMessagePair", parameterMessagePair);
+		mapOfMessagePairs.put("keyMessagePair", keyMessagePair);
+		
+		return mapOfMessagePairs;
 	}
 
 	private void initProperties() {
