@@ -119,8 +119,8 @@ public class SmsMtnService {
 		
 		for(SmsProps smsProps : SmsProps.values()){
 			builder.append("#").append(smsProps.getDefaultDescription()).append(newLine);
-			String myNewLine = keyMessagePair.get(smsProps.getKey()) == null ? smsProps.getKey()+"="+smsProps.getDefaultValue():keyMessagePair.get(smsProps.getKey());
-			builder.append(myNewLine).append(newLine).append(newLine);
+			String messageNewLine = keyMessagePair.get(smsProps.getKey()) == null ? smsProps.getKey()+"="+smsProps.getDefaultValue():keyMessagePair.get(smsProps.getKey());
+			builder.append(messageNewLine).append(newLine).append(newLine);
 		}
 		
 		if(!file.exists()){
@@ -183,11 +183,11 @@ public class SmsMtnService {
 		List<String> listOfMessages = new ArrayList<>();
 		
 		try(Stream<String> stream = Files.lines(Paths.get(smsPropsFile))){
-			 listOfParameters = stream.filter(Line -> Line.startsWith("#parameters"))
+			 listOfParameters = stream.filter(Line -> validate(Line))
 					 						  .collect(Collectors.toList());
 		 } catch (IOException e) {
 			// return empty map
-			e.printStackTrace();
+			log.error("Error in process parameter : get list of parameters",e);
 		}
 		
 		try(Stream<String> stream = Files.lines(Paths.get(smsPropsFile))){
@@ -195,7 +195,7 @@ public class SmsMtnService {
 					  .collect(Collectors.toList());
 		 } catch (IOException e) {
 			// return empty map
-			e.printStackTrace();
+			 log.error("Error in process parameter : get list of messages",e);
 		}
 		
 		for (int i = 0; i < listOfParameters.size(); i++) {
@@ -208,6 +208,21 @@ public class SmsMtnService {
 		mapOfMessagePairs.put("keyMessagePair", keyMessagePair);
 		
 		return mapOfMessagePairs;
+	}
+	
+	
+
+	private boolean validate(String value) {
+		log.info("inside here");
+		if(value.equalsIgnoreCase("#CONFIGURATION FILE FOR THE SMS MESSAGES SENT TO USERS")){
+			return false;
+		}
+		
+		if(value.startsWith("#")){
+			return true;
+		}
+		
+		return false;
 	}
 
 	private void initProperties() {
