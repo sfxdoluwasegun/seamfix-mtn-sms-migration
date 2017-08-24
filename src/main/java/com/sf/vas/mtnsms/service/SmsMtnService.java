@@ -213,7 +213,7 @@ public class SmsMtnService {
 	
 
 	private boolean validate(String value) {
-		log.info("inside here");
+		
 		if(value.equalsIgnoreCase("#CONFIGURATION FILE FOR THE SMS MESSAGES SENT TO USERS")){
 			return false;
 		}
