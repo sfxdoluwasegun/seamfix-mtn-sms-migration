@@ -28,7 +28,9 @@ import javax.inject.Inject;
 
 import org.jboss.logging.Logger;
 
+import com.sf.sms.dto.SmsRequestDTO;
 import com.sf.vas.atjpa.entities.SmsLog;
+import com.sf.vas.atjpa.enums.NetworkCarrierType;
 import com.sf.vas.atjpa.enums.Status;
 import com.sf.vas.mtnsms.enums.SmsResponseCode;
 import com.sf.vas.mtnsms.enums.SmsSetting;
@@ -256,7 +258,7 @@ public class SmsMtnService {
 		} 
 	}
 
-	public void sendSms(SmsProps smsProps, String msisdn, String param, String value) throws VasException {
+	public void sendSms(SmsProps smsProps, String msisdn, String param, String value, NetworkCarrierType networkCarrierType) throws VasException {
 		initProperties();
 		
 		String message = vasProperties.getProperty(smsProps.getKey(), smsProps.getDefaultValue(), param, value);
@@ -268,11 +270,16 @@ public class SmsMtnService {
 		
 		log.info("msisdn : "+msisdn+", message : "+message);
 		
-		sendSms(smsProps, smsRequest);
+		sendSms(smsProps, smsRequest, networkCarrierType);
 	}
 	
-	public void sendSms(SmsProps smsProps, String msisdn, Map<String, Object> params) throws VasException {
+	public void sendSms(SmsRequestDTO smsRequestDTO) throws VasException {
 		initProperties();
+		
+		SmsProps smsProps = smsRequestDTO.getSmsProps();
+		String msisdn = smsRequestDTO.getMsisdn();
+		Map<String, Object> params = smsRequestDTO.getParams(); 
+		NetworkCarrierType networkCarrierType = smsRequestDTO.getNetworkCarrierType();
 		
 		String message = vasProperties.getProperty(smsProps.getKey(), smsProps.getDefaultValue(), params);
 		
@@ -283,10 +290,31 @@ public class SmsMtnService {
 		
 		log.info("msisdn : "+msisdn+", message : "+message);
 		
-		sendSms(smsProps, smsRequest);
+		sendSms(smsProps, smsRequest, networkCarrierType);
 	}
+
+	public TransactionResponse sendSms (SmsProps smsProps, SmsRequest request, NetworkCarrierType networkCarrierType) throws VasException {
+		
+		if(networkCarrierType == null){
+			networkCarrierType = NetworkCarrierType.MTN_NG;
+		}
+		
+		switch (networkCarrierType) {
+		
+		case MTN_NG:
+			return sendMtnSms(smsProps, request);
+
+		default:
+			break;
+		}
+		
+		log.info("Sms unsent for un implemented network carrier : "+networkCarrierType
+				+", message : "+request.getMessage() + ", msisdn : "+request.getMsisdn()); 
+		
+		return null;
+	}	
 	
-	public TransactionResponse sendSms (SmsProps smsProps, SmsRequest request) throws VasException {
+	public TransactionResponse sendMtnSms (SmsProps smsProps, SmsRequest request) throws VasException {
 		
 		if(request == null 
 				|| request.getMessage() == null || request.getMessage().trim().isEmpty()
