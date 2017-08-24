@@ -292,8 +292,29 @@ public class SmsMtnService {
 		
 		sendSms(smsProps, smsRequest, networkCarrierType);
 	}
-	
+
 	public TransactionResponse sendSms (SmsProps smsProps, SmsRequest request, NetworkCarrierType networkCarrierType) throws VasException {
+		
+		if(networkCarrierType == null){
+			networkCarrierType = NetworkCarrierType.MTN_NG;
+		}
+		
+		switch (networkCarrierType) {
+		
+		case MTN_NG:
+			return sendMtnSms(smsProps, request);
+
+		default:
+			break;
+		}
+		
+		log.info("Sms unsent for un implemented network carrier : "+networkCarrierType
+				+", message : "+request.getMessage() + ", msisdn : "+request.getMsisdn()); 
+		
+		return null;
+	}	
+	
+	public TransactionResponse sendMtnSms (SmsProps smsProps, SmsRequest request) throws VasException {
 		
 		if(request == null 
 				|| request.getMessage() == null || request.getMessage().trim().isEmpty()
