@@ -61,12 +61,14 @@ public class SmsMtnService {
 	private String smsPropsFile = System.getProperty("jboss.home.dir")+File.separator+"bin"+File.separator+"sms.properties";
 	private File file = new File(smsPropsFile);
 	private long lastKnownModifiedTime = 0;
+	private String defaultParameter = "#Configuration file for the sms messages sent to users";
 	
 	@Inject
 	SmsMtnSoapService soapService;
 	
 	@Inject
 	private SmsMtnQueryService queryService;
+	private StringBuilder append;
 	
 	@PostConstruct
 	private void init(){
@@ -117,7 +119,7 @@ public class SmsMtnService {
 		StringBuilder builder = new StringBuilder();
 		String newLine = "\n";
 		
-		builder.append("#Configuration file for the sms messages sent to users").append(newLine).append(newLine).append(newLine);
+		append = builder.append(defaultParameter).append(newLine).append(newLine).append(newLine);
 		
 		for(SmsProps smsProps : SmsProps.values()){
 			builder.append("#").append(smsProps.getDefaultDescription()).append(newLine);
@@ -176,7 +178,6 @@ public class SmsMtnService {
 	 */
 	private Map<String, Map<String, String>> processParameters() {
 		
-		log.info("In processParameters");
 		Map<String,Map<String, String>> mapOfMessagePairs = new HashMap<String, Map<String,String>>();
 		
 		Map<String, String> parameterMessagePair = new HashMap<String, String>();
@@ -216,7 +217,7 @@ public class SmsMtnService {
 
 	private boolean validate(String value) {
 		
-		if(value.equalsIgnoreCase("#CONFIGURATION FILE FOR THE SMS MESSAGES SENT TO USERS")){
+		if(value.equalsIgnoreCase(defaultParameter)){
 			return false;
 		}
 		
@@ -257,7 +258,7 @@ public class SmsMtnService {
 		String newLine = "\n";
 		StringBuilder builder = new StringBuilder();
 		
-		builder.append("#Configuration file for the sms messages sent to users").append(newLine).append(newLine).append(newLine);
+		builder.append(defaultParameter).append(newLine).append(newLine).append(newLine);
 		
 		for(SmsProps smsProps : SmsProps.values()){
 			builder.append("#").append(smsProps.getDefaultDescription()).append(newLine);
