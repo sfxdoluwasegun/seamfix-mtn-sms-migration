@@ -4,7 +4,7 @@
 
     <groupId>com.sf.vas</groupId>
     <artifactId>mtn-sms</artifactId>
-    <version>1.0.0-final</version>
+    <version>1.0.1-final</version>
     <packaging>ejb</packaging>
 
     <name>mtn-sms</name>
@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>com.sf.vas</groupId>
 			<artifactId>atopup-jpa</artifactId>
-			<version>0.1.18-final</version>
+			<version>0.1.19-final</version>
 		</dependency>
         <dependency>
 			<groupId>com.sf.vas</groupId>
