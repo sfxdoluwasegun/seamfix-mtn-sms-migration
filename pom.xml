@@ -4,7 +4,7 @@
 
     <groupId>com.sf.vas</groupId>
     <artifactId>mtn-sms</artifactId>
-    <version>1.0.1-final</version>
+    <version>1.0.2-final</version>
     <packaging>ejb</packaging>
 
     <name>mtn-sms</name>
@@ -41,7 +41,7 @@
         <dependency>
 			<groupId>com.sf.vas</groupId>
 			<artifactId>vas-utils</artifactId>
-			<version>0.0.11-final</version>
+			<version>0.0.12-final</version>
         </dependency>
         <dependency>
 			<groupId>org.jboss.logging</groupId>
@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>com.sf.vas</groupId>
 			<artifactId>autotopup-dsl</artifactId>
-		    <version>0.0.4-final</version>
+		    <version>0.0.5-final</version>
 		</dependency>
     </dependencies>
 	<distributionManagement>
