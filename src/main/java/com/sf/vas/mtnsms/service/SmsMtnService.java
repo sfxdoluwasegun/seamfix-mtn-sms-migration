@@ -68,7 +68,6 @@ public class SmsMtnService {
 	
 	@Inject
 	private SmsMtnQueryService queryService;
-	private StringBuilder append;
 	
 	@PostConstruct
 	private void init(){
@@ -119,7 +118,7 @@ public class SmsMtnService {
 		StringBuilder builder = new StringBuilder();
 		String newLine = "\n";
 		
-		append = builder.append(defaultParameter).append(newLine).append(newLine).append(newLine);
+		builder.append(defaultParameter).append(newLine).append(newLine).append(newLine);
 		
 		for(SmsProps smsProps : SmsProps.values()){
 			builder.append("#").append(smsProps.getDefaultDescription()).append(newLine);
