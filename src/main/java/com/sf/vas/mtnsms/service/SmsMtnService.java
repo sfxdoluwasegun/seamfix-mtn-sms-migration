@@ -61,6 +61,7 @@ public class SmsMtnService {
 	private String smsPropsFile = System.getProperty("jboss.home.dir")+File.separator+"bin"+File.separator+"sms.properties";
 	private File file = new File(smsPropsFile);
 	private long lastKnownModifiedTime = 0;
+	private String defaultParameter = "#Configuration file for the sms messages sent to users";
 	
 	@Inject
 	SmsMtnSoapService soapService;
@@ -117,12 +118,12 @@ public class SmsMtnService {
 		StringBuilder builder = new StringBuilder();
 		String newLine = "\n";
 		
-		builder.append("#Configuration file for the sms messages sent to users").append(newLine).append(newLine).append(newLine);
+		builder.append(defaultParameter).append(newLine).append(newLine).append(newLine);
 		
 		for(SmsProps smsProps : SmsProps.values()){
 			builder.append("#").append(smsProps.getDefaultDescription()).append(newLine);
-			String myNewLine = keyMessagePair.get(smsProps.getKey()) == null ? smsProps.getKey()+"="+smsProps.getDefaultValue():keyMessagePair.get(smsProps.getKey());
-			builder.append(myNewLine).append(newLine).append(newLine);
+			String messageNewLine = keyMessagePair.get(smsProps.getKey()) == null ? smsProps.getKey()+"="+smsProps.getDefaultValue():keyMessagePair.get(smsProps.getKey());
+			builder.append(messageNewLine).append(newLine).append(newLine);
 		}
 		
 		if(!file.exists()){
@@ -176,7 +177,6 @@ public class SmsMtnService {
 	 */
 	private Map<String, Map<String, String>> processParameters() {
 		
-		log.info("In processParameters");
 		Map<String,Map<String, String>> mapOfMessagePairs = new HashMap<String, Map<String,String>>();
 		
 		Map<String, String> parameterMessagePair = new HashMap<String, String>();
@@ -185,11 +185,11 @@ public class SmsMtnService {
 		List<String> listOfMessages = new ArrayList<>();
 		
 		try(Stream<String> stream = Files.lines(Paths.get(smsPropsFile))){
-			 listOfParameters = stream.filter(Line -> Line.startsWith("#parameters"))
+			 listOfParameters = stream.filter(Line -> validate(Line))
 					 						  .collect(Collectors.toList());
 		 } catch (IOException e) {
 			// return empty map
-			e.printStackTrace();
+			log.error("Error processing parameters : get list of parameters",e);
 		}
 		
 		try(Stream<String> stream = Files.lines(Paths.get(smsPropsFile))){
@@ -197,7 +197,7 @@ public class SmsMtnService {
 					  .collect(Collectors.toList());
 		 } catch (IOException e) {
 			// return empty map
-			e.printStackTrace();
+			 log.error("Error processing parameters : get list of messages",e);
 		}
 		
 		for (int i = 0; i < listOfParameters.size(); i++) {
@@ -210,6 +210,21 @@ public class SmsMtnService {
 		mapOfMessagePairs.put("keyMessagePair", keyMessagePair);
 		
 		return mapOfMessagePairs;
+	}
+	
+	
+
+	private boolean validate(String value) {
+		
+		if(value.equalsIgnoreCase(defaultParameter)){
+			return false;
+		}
+		
+		if(value.startsWith("#")){
+			return true;
+		}
+		
+		return false;
 	}
 
 	private void initProperties() {
@@ -242,7 +257,7 @@ public class SmsMtnService {
 		String newLine = "\n";
 		StringBuilder builder = new StringBuilder();
 		
-		builder.append("#Configuration file for the sms messages sent to users").append(newLine).append(newLine).append(newLine);
+		builder.append(defaultParameter).append(newLine).append(newLine).append(newLine);
 		
 		for(SmsProps smsProps : SmsProps.values()){
 			builder.append("#").append(smsProps.getDefaultDescription()).append(newLine);
