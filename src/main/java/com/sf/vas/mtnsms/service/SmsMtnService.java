@@ -189,7 +189,7 @@ public class SmsMtnService {
 					 						  .collect(Collectors.toList());
 		 } catch (IOException e) {
 			// return empty map
-			log.error("Error in process parameter : get list of parameters",e);
+			log.error("Error processing parameters : get list of parameters",e);
 		}
 		
 		try(Stream<String> stream = Files.lines(Paths.get(smsPropsFile))){
@@ -197,7 +197,7 @@ public class SmsMtnService {
 					  .collect(Collectors.toList());
 		 } catch (IOException e) {
 			// return empty map
-			 log.error("Error in process parameter : get list of messages",e);
+			 log.error("Error processing parameters : get list of messages",e);
 		}
 		
 		for (int i = 0; i < listOfParameters.size(); i++) {
