@@ -215,7 +215,7 @@ public class SmsMtnService {
 	
 
 	private boolean validate(String value) {
-		log.info("here now");
+		
 		if(value.equalsIgnoreCase(defaultParameter)){
 			return false;
 		}

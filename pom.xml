@@ -4,7 +4,7 @@
 
     <groupId>com.sf.vas</groupId>
     <artifactId>mtn-sms</artifactId>
-    <version>1.0.2-final</version>
+    <version>1.0.3-SNAPSHOT</version>
     <packaging>ejb</packaging>
 
     <name>mtn-sms</name>
@@ -41,7 +41,7 @@
         <dependency>
 			<groupId>com.sf.vas</groupId>
 			<artifactId>vas-utils</artifactId>
-			<version>0.0.12-final</version>
+			<version>0.0.14-SNAPSHOT</version>
         </dependency>
         <dependency>
 			<groupId>org.jboss.logging</groupId>
