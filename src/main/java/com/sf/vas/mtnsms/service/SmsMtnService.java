@@ -402,4 +402,15 @@ public class SmsMtnService {
 		return response;
 	}
 	
+	/**
+	 * 
+	 * @param props
+	 * @param params
+	 * @return
+	 */
+	public String getSmsMessage(SmsProps props, Map<String, Object> params){
+		initProperties(); // update if there are changes
+		return vasProperties.getProperty(props.getKey(), props.getDefaultValue(), params);
+	}
+	
 }
