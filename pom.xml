@@ -4,7 +4,7 @@
 
     <groupId>com.sf.vas</groupId>
     <artifactId>mtn-sms</artifactId>
-    <version>1.0.4-final</version>
+    <version>1.0.5-SNAPSHOT</version>
     <packaging>ejb</packaging>
 
     <name>mtn-sms</name>
@@ -58,12 +58,12 @@
 		<repository>
 			<id>deployment</id>
 			<name>Internal Releases</name>
-			<url>http://singlewindow.seamfix.com:7997/nexus/content/repositories/releases</url>
+			<url>https://nexus.seamfix.com/nexus/content/repositories/releases</url>
 		</repository>
 		<snapshotRepository>
 			<id>deployment</id>
 			<name>Internal Releases</name>
-			<url>http://singlewindow.seamfix.com:7997/nexus/content/repositories/snapshots</url>
+			<url>https://nexus.seamfix.com/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 
